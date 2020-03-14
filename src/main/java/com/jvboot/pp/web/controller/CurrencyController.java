@@ -2,13 +2,11 @@ package com.jvboot.pp.web.controller;
 
 import com.jvboot.pp.service.CurrencyService;
 import com.jvboot.pp.web.dto.CurrencyDto;
+import com.jvboot.pp.web.dto.DataDto;
 import com.jvboot.pp.web.dto.PagedDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -24,5 +22,10 @@ public class CurrencyController {
     @GetMapping
     public PagedDto<CurrencyDto> getCurrencies(Pageable pageable) {
         return new PagedDto<>(service.getPaged(pageable).map(CurrencyDto::new));
+    }
+
+    @GetMapping("/{ticker}")
+    public DataDto<CurrencyDto> getCurrencyByTicker(@PathVariable String ticker) {
+        return new DataDto<>(new CurrencyDto(service.getByTicker(ticker)));
     }
 }
