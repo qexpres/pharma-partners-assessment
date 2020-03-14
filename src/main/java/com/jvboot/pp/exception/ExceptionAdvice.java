@@ -1,8 +1,15 @@
 package com.jvboot.pp.exception;
 
 import com.jvboot.pp.web.dto.ErrorDto;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -18,7 +25,36 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
      * @return a nicely formatted error
      */
     @ExceptionHandler(ApiException.class)
-    public ErrorDto apiException(ApiException e) {
-        return new ErrorDto(e);
+    public ResponseEntity<ErrorDto> apiException(ApiException e) {
+        return new ResponseEntity<>(new ErrorDto(e), e.getStatus());
+    }
+
+    /**
+     * Custom error for validation errors.
+     *
+     * @param ex
+     * @param headers
+     * @param status
+     * @param request
+     * @return
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+        MethodArgumentNotValidException ex,
+        HttpHeaders headers,
+        HttpStatus status,
+        WebRequest request
+    ) {
+        return new ResponseEntity<>(new ErrorDto(status, messages(ex.getBindingResult())), status);
+    }
+
+    private String[] messages(BindingResult bindingResult) {
+        return bindingResult.getAllErrors()
+            .stream()
+            .map(objectError -> {
+                FieldError fieldError = (FieldError) objectError;
+                return fieldError.getField() + ": " + fieldError.getDefaultMessage();
+            })
+            .toArray(String[]::new);
     }
 }

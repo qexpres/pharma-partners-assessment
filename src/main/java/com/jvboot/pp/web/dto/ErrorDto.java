@@ -1,16 +1,21 @@
 package com.jvboot.pp.web.dto;
 
 import com.jvboot.pp.exception.ApiException;
+import org.springframework.http.HttpStatus;
 
 public class ErrorDto {
     private final int httpCode;
     private final String httpStatus;
-    private final String message;
+    private final String[] messages;
 
     public ErrorDto(ApiException e) {
-        httpCode = e.getStatus().value();
-        httpStatus = e.getStatus().getReasonPhrase();
-        message = e.getMessage();
+        this(e.getStatus(), e.getMessage());
+    }
+
+    public ErrorDto(HttpStatus status, String... messages) {
+        this.httpCode = status.value();
+        this.httpStatus = status.getReasonPhrase();
+        this.messages = messages;
     }
 
     public int getHttpCode() {
@@ -21,7 +26,7 @@ public class ErrorDto {
         return httpStatus;
     }
 
-    public String getMessage() {
-        return message;
+    public String[] getMessages() {
+        return messages;
     }
 }
