@@ -24,7 +24,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         UUID uuid = UUID.randomUUID();
         request.setAttribute(REQUEST_ID, uuid);
         String shortId = shortId(uuid);
-        log.info("Request [{}] {} {}", shortId, request.getMethod(), request.getRequestURI());
+        log.info("Request  [{}] {} {}", shortId, request.getMethod(), request.getRequestURI());
         return true;
     }
 
@@ -37,13 +37,13 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     ) throws Exception {
         String shortId = shortId(request.getAttribute(REQUEST_ID));
         int status = response.getStatus();
-        String format = "Response[{}] {}";
+        String format = "Response [{}] {}";
         if (ex != null) {
-            log.warn(format, shortId, ex.getMessage());
-        } else if (400 <= status && status < 500) {
-            log.warn(format, shortId, status);
-        } else if (500 <= status) {
+            log.error(format, shortId, ex.getMessage());
+        } else if (status >= 500) {
             log.error(format, shortId, status);
+        } else if (status >= 400) {
+            log.warn(format, shortId, status);
         } else {
             log.info(format, shortId, status);
         }

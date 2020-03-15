@@ -3,11 +3,11 @@ package com.jvboot.pp.web.dto;
 import com.jvboot.pp.domain.Currency;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 public class CurrencyDto extends BaseCurrencyDto {
     @NotBlank
-    @Size(min = 3, max = 3, message = "must be exactly 3 characters long")
+    @Pattern(regexp = "[A-Z]{1,10}", message = "must consist of 1 to 10 letters")
     private String ticker;
 
     public CurrencyDto() {
