@@ -25,7 +25,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
      * @return a nicely formatted error
      */
     @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ErrorDto> apiException(ApiException e) {
+    public ResponseEntity<ErrorDto> handleApiException(ApiException e) {
         return new ResponseEntity<>(new ErrorDto(e), e.getStatus());
     }
 

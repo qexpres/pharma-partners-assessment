@@ -19,10 +19,10 @@ public class CurrencyDto extends BaseCurrencyDto {
      * @param entity the Currency entity
      */
     public CurrencyDto(Currency entity) {
-        this.ticker = entity.getTicker();
-        this.name = entity.getName();
-        this.numberOfCoins = entity.getNumberOfCoins().toString();
-        this.marketCap = entity.getMarketCap().toString();
+        setTicker(entity.getTicker());
+        setName(entity.getName());
+        setNumberOfCoins(entity.getNumberOfCoins().toString());
+        setMarketCap(entity.getMarketCap().toString());
     }
 
     @Override
@@ -37,6 +37,8 @@ public class CurrencyDto extends BaseCurrencyDto {
     }
 
     public void setTicker(String ticker) {
-        this.ticker = ticker;
+        this.ticker = ticker != null
+            ? ticker.toUpperCase()
+            : null;
     }
 }
