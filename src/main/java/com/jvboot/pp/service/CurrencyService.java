@@ -16,24 +16,16 @@ public class CurrencyService {
         this.repository = repository;
     }
 
-    public Currency getByTicker(String ticker) {
-        return repository.findById(ticker.toUpperCase())
-            .orElseThrow(() -> new NotFoundException("Could not find currency with ticker: " + ticker));
-    }
-
-    public Page<Currency> getPaged(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
-    public Currency updateByTicker(String ticker, Currency update) {
-        Currency currency = getByTicker(ticker);
-        currency.setName(update.getName());
-        currency.setNumberOfCoins(update.getNumberOfCoins());
-        currency.setMarketCap(update.getMarketCap());
-        return repository.saveAndFlush(currency);
-    }
-
+    /**
+     * Create a new Currency based on the entity passed to it.
+     *
+     * @param create the Currency to create
+     * @return the created Currency
+     * @throws ConflictException when a currency with the same ticker already exists
+     */
     public Currency create(Currency create) {
+        assert create != null;
+
         String ticker = create.getTicker();
         repository.findById(ticker)
             .ifPresent(currency -> {
@@ -41,5 +33,61 @@ public class CurrencyService {
             });
 
         return repository.saveAndFlush(create);
+    }
+
+    /**
+     * Delete a Currency by its ticker.
+     *
+     * @param ticker the ticker of the Currency to delete
+     * @throws NotFoundException when the currency for the given ticker cannot be found
+     */
+    public void deleteByTicker(String ticker) {
+        assert ticker != null;
+
+        repository.delete(getByTicker(ticker));
+    }
+
+    /**
+     * Get a Currency by its ticker.
+     *
+     * @param ticker the ticker of the Currency to find
+     * @throws NotFoundException when the currency for the given ticker cannot be found
+     */
+    public Currency getByTicker(String ticker) {
+        assert ticker != null;
+
+        return repository.findById(ticker.toUpperCase())
+            .orElseThrow(() -> new NotFoundException("Could not find currency with ticker: " + ticker));
+    }
+
+    /**
+     * Get a paginated list of currencies.
+     *
+     * @param pageable the Pageable for determining offsets, limits and sort orders
+     * @return the paginated list of currencies
+     */
+    public Page<Currency> getPaged(Pageable pageable) {
+        assert pageable != null;
+
+        return repository.findAll(pageable);
+    }
+
+    /**
+     * Update the Currency for the given ticker to the values of the Currency passed to it.
+     *
+     * @param ticker the ticker of the Currency to update
+     * @param update the Currency with the new values
+     * @return the updated Currency
+     */
+    public Currency updateByTicker(String ticker, Currency update) {
+        assert ticker != null;
+        assert update != null;
+
+        Currency currency = getByTicker(ticker);
+        currency.setName(update.getName());
+        currency.setNumberOfCoins(update.getNumberOfCoins());
+        currency.setMarketCap(update.getMarketCap());
+
+        return repository.saveAndFlush(currency);
     }
 }

@@ -10,11 +10,13 @@ import java.math.BigInteger;
 @Table
 public class Currency {
     @Id
+    @Column(name = "TICKER")
     private String ticker;
+    @Column(name = "NAME")
     private String name;
-    @Column(name = "number_of_coins")
+    @Column(name = "NUMBER_OF_COINS")
     private BigInteger numberOfCoins;
-    @Column(name = "market_cap")
+    @Column(name = "MARKET_CAP")
     private BigInteger marketCap;
 
     public String getTicker() {

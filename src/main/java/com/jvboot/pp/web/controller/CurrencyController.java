@@ -7,6 +7,7 @@ import com.jvboot.pp.web.dto.DataDto;
 import com.jvboot.pp.web.dto.PagedDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,8 +24,15 @@ public class CurrencyController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DataDto<CurrencyDto> createCurrency(@Valid @RequestBody CurrencyDto createDto) {
         return new DataDto<>(new CurrencyDto(service.create(createDto.toEntity())));
+    }
+
+    @DeleteMapping("/{ticker}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCurrencyByTicker(@PathVariable String ticker) {
+        service.deleteByTicker(ticker);
     }
 
     @GetMapping

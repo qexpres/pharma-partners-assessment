@@ -32,11 +32,11 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     /**
      * Custom error for validation errors.
      *
-     * @param ex
-     * @param headers
-     * @param status
-     * @param request
-     * @return
+     * @param ex      the original validation exception
+     * @param headers the headers to set in the response
+     * @param status  the http status to use in the response
+     * @param request the original request
+     * @return a nicely formatted validation error
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
