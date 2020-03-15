@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 public class CurrencyDto extends BaseCurrencyDto {
     @NotBlank
-    @Pattern(regexp = "[A-Z]{1,10}", message = "must consist of 1 to 10 letters")
+    @Pattern(regexp = "[a-zA-Z]{1,10}", message = "must consist of 1 to 10 letters")
     private String ticker;
 
     public CurrencyDto() {
@@ -37,8 +37,6 @@ public class CurrencyDto extends BaseCurrencyDto {
     }
 
     public void setTicker(String ticker) {
-        this.ticker = ticker != null
-            ? ticker.toUpperCase()
-            : null;
+        this.ticker = ticker;
     }
 }

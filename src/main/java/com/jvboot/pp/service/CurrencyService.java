@@ -29,7 +29,7 @@ public class CurrencyService {
         String ticker = create.getTicker();
         repository.findById(ticker)
             .ifPresent(currency -> {
-                throw new ConflictException("currency already exists for this ticker: " + ticker);
+                throw new ConflictException("currency already exists for ticker " + ticker);
             });
 
         return repository.saveAndFlush(create);
@@ -57,7 +57,7 @@ public class CurrencyService {
         assert ticker != null;
 
         return repository.findById(ticker.toUpperCase())
-            .orElseThrow(() -> new NotFoundException("Could not find currency with ticker: " + ticker));
+            .orElseThrow(() -> new NotFoundException("could not find currency with ticker " + ticker));
     }
 
     /**
