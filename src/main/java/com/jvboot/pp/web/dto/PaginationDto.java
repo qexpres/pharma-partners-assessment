@@ -6,13 +6,13 @@ public class PaginationDto {
     private final int page;
     private final int pageSize;
     private final int totalPages;
-    private final int totalElements;
+    private final long totalElements;
 
     PaginationDto(Page<?> page) {
         this.page = page.getNumber() + 1;
         this.pageSize = page.getSize();
         this.totalPages = page.getTotalPages();
-        this.totalElements = page.getNumberOfElements();
+        this.totalElements = page.getTotalElements();
     }
 
     public int getPage() {
@@ -27,7 +27,7 @@ public class PaginationDto {
         return totalPages;
     }
 
-    public int getTotalElements() {
+    public long getTotalElements() {
         return totalElements;
     }
 }

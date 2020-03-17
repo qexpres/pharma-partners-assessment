@@ -43,7 +43,7 @@ class CurrencyServiceTest {
     @DirtiesContext
     void createShouldCreateCurrency() {
         Currency createdCurrency = service.create(newCurrency);
-        assertThat(createdCurrency).isEqualTo(createdCurrency);
+        assertThat(createdCurrency).isEqualTo(newCurrency);
 
         Currency persistedCurrency = service.getByTicker(newCurrency.getTicker());
         assertThat(persistedCurrency).isEqualTo(newCurrency);

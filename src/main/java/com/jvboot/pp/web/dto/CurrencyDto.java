@@ -25,6 +25,11 @@ public class CurrencyDto extends BaseCurrencyDto {
         setMarketCap(entity.getMarketCap().toString());
     }
 
+    /**
+     * Create a Currency entity from this DTO. Also sets a ticker.
+     *
+     * @return the Currency entity
+     */
     @Override
     public Currency toEntity() {
         Currency entity = super.toEntity();

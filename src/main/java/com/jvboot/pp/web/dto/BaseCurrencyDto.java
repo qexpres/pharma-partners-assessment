@@ -21,7 +21,8 @@ public abstract class BaseCurrencyDto {
 
     /**
      * Create a Currency entity from this DTO.
-     * @return
+     *
+     * @return the Currency entity
      */
     public Currency toEntity() {
         Currency entity = new Currency();

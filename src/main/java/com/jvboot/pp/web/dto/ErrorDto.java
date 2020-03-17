@@ -13,6 +13,8 @@ public class ErrorDto {
     }
 
     public ErrorDto(HttpStatus status, String... messages) {
+        assert status != null;
+        
         this.httpCode = status.value();
         this.httpStatus = status.getReasonPhrase();
         this.messages = messages;
