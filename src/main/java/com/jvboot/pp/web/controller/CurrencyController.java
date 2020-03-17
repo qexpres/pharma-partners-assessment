@@ -1,17 +1,21 @@
 package com.jvboot.pp.web.controller;
 
+import com.jvboot.pp.annotation.ApiPageable;
 import com.jvboot.pp.service.CurrencyService;
 import com.jvboot.pp.web.dto.CurrencyDto;
 import com.jvboot.pp.web.dto.CurrencyUpdateDto;
 import com.jvboot.pp.web.dto.DataDto;
 import com.jvboot.pp.web.dto.PagedDto;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
+@Api(tags = "Currencies")
 @CrossOrigin
 @RestController
 @RequestMapping(path = "/currencies")
@@ -36,7 +40,8 @@ public class CurrencyController {
     }
 
     @GetMapping
-    public PagedDto<CurrencyDto> getCurrencies(Pageable pageable) {
+    @ApiPageable
+    public PagedDto<CurrencyDto> getCurrencies(@ApiIgnore Pageable pageable) {
         return new PagedDto<>(service.getPaged(pageable).map(CurrencyDto::new));
     }
 

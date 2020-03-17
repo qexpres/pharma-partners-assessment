@@ -15,6 +15,15 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Log the request and attach an identifier to it for later reference. The response and handler are irrelevant for
+     * now.
+     *
+     * @param request  the request object to log
+     * @param response the response object
+     * @param handler  the handler
+     * @return
+     */
     @Override
     public boolean preHandle(
         HttpServletRequest request,
@@ -28,6 +37,16 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
+    /**
+     * Log each response after completing the request. For now it only logs to which requests it belongs by displaying
+     * the attached identifier and it shows the HTTP response code. If an exception is passed along, it displays the
+     * exception message instead.
+     *
+     * @param request  the original request object
+     * @param response the response object
+     * @param handler  the handler
+     * @param ex       the exception
+     */
     @Override
     public void afterCompletion(
         HttpServletRequest request,
@@ -49,6 +68,12 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
+    /**
+     * Takes a stringified UUID and only shows the first 8 characters as a shorthash.
+     *
+     * @param uuid the stringified UUID
+     * @return a shorthash
+     */
     private String shortId(Object uuid) {
         if (uuid instanceof String) {
             return ((String) uuid).substring(0, 8);

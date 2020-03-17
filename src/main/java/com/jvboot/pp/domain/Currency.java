@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
+/**
+ * The Currency entity. Overrides equals and hashCode methods to be able to compare detached entities with the same ID.
+ */
 @Entity
 @Table
 public class Currency implements Serializable {
