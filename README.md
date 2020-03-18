@@ -2,7 +2,8 @@
 
 Crypto currency API by Jasper Boot. Includes 5 endpoints to create, read, update and delete currencies. It fully 
 features pagination and sorting on the `GET /currencies` endpoint and all requests and responses are logged. Logs will
-be written to `logs/runtime.log` file.
+be written to `logs/runtime.log` file. Currencies represent their market cap and number of coins as strings, because 
+traditional JavaScript frameworks cannot handle big integers so well.
 
 ## Build & Run
 
