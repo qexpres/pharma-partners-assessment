@@ -9,9 +9,9 @@ traditional JavaScript frameworks cannot handle big integers so well.
 
 1. Run `./mvnw install` on Mac/Linux or `./mvnw.exe` on Windows.
 2. Run `java -jar target/pp-0.0.1-SNAPSHOT.jar` to start the API
-3. The API should be available at http://localhost:8080
+3. The API should be available at http://localhost:8080/api
 
 ## Documentation
 
-Visit the swagger documentation at http://localhost:8080/swagger-ui.html. There you can find and test all available 
+Visit the swagger documentation at http://localhost:8080/api/swagger-ui.html. There you can find and test all available 
 endpoints.
