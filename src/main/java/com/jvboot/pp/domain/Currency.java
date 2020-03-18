@@ -24,6 +24,38 @@ public class Currency implements Serializable {
     @Column(name = "MARKET_CAP")
     private BigInteger marketCap;
 
+    public static class CurrencyBuilder {
+        private final String name;
+        private final BigInteger numberOfCoins;
+        private final BigInteger marketCap;
+        private String ticker;
+
+        public CurrencyBuilder(String name, BigInteger numberOfCoins, BigInteger marketCap) {
+            this.name = name;
+            this.numberOfCoins = numberOfCoins;
+            this.marketCap = marketCap;
+        }
+
+        public CurrencyBuilder setTicker(String ticker) {
+            this.ticker = ticker;
+            return this;
+        }
+
+        public Currency build() {
+            return new Currency(this);
+        }
+    }
+
+    protected Currency() {
+    }
+
+    private Currency(CurrencyBuilder builder) {
+        ticker = builder.ticker;
+        name = builder.name;
+        numberOfCoins = builder.numberOfCoins;
+        marketCap = builder.marketCap;
+    }
+
     public String getTicker() {
         return ticker;
     }

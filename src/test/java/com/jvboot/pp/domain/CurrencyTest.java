@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CurrencyTest {
     private static final String ticker1 = "ABC";
@@ -31,14 +30,36 @@ class CurrencyTest {
     }
 
     private static Currency createCurrency(String ticker, String name, String numberOfCoins, String marketCap) {
-        Currency currency = new Currency();
+        return new Currency.CurrencyBuilder(name, new BigInteger(numberOfCoins), new BigInteger(marketCap))
+            .setTicker(ticker)
+            .build();
+    }
 
-        currency.setTicker(ticker);
-        currency.setName(name);
-        currency.setNumberOfCoins(new BigInteger(numberOfCoins));
-        currency.setMarketCap(new BigInteger(marketCap));
+    @Test
+    public void currencyBuilderShouldCreateCurrency() {
+        Currency newCurrency = new Currency.CurrencyBuilder(
+            name1,
+            new BigInteger(numberOfCoins1),
+            new BigInteger(marketCap1)
+        ).build();
 
-        return currency;
+        assertNull(newCurrency.getTicker());
+        assertEquals(currency.getName(), newCurrency.getName());
+        assertEquals(currency.getNumberOfCoins(), newCurrency.getNumberOfCoins());
+        assertEquals(currency.getMarketCap(), newCurrency.getMarketCap());
+    }
+
+    @Test
+    public void currencyBuilderShouldSetOptionalTicker() {
+        Currency newCurrency = new Currency.CurrencyBuilder(
+            name1,
+            new BigInteger(numberOfCoins1),
+            new BigInteger(marketCap1)
+        ).setTicker(ticker1).build();
+
+        assertNotNull(newCurrency.getTicker());
+        assertEquals(currency.getTicker(), newCurrency.getTicker());
+        assertEquals(currency, newCurrency);
     }
 
     @Test

@@ -25,11 +25,7 @@ public abstract class BaseCurrencyDto {
      * @return the Currency entity
      */
     public Currency toEntity() {
-        Currency entity = new Currency();
-        entity.setName(name);
-        entity.setNumberOfCoins(new BigInteger(numberOfCoins));
-        entity.setMarketCap(new BigInteger(marketCap));
-        return entity;
+        return toBuilder().build();
     }
 
     public String getName() {
@@ -54,5 +50,14 @@ public abstract class BaseCurrencyDto {
 
     public void setMarketCap(String marketCap) {
         this.marketCap = marketCap;
+    }
+
+    /**
+     * Create a currency builder for further extension.
+     *
+     * @return the CurrencyBuilder
+     */
+    protected Currency.CurrencyBuilder toBuilder() {
+        return new Currency.CurrencyBuilder(name, new BigInteger(numberOfCoins), new BigInteger(marketCap));
     }
 }

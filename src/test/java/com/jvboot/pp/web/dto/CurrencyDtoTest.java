@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CurrencyDtoTest {
-    static final String KNOWN_TICKER = "BTC";
+    static final String knownTicker = "BTC";
     static Validator validator;
     static Currency entity;
 
@@ -20,11 +20,9 @@ class CurrencyDtoTest {
 
     @BeforeAll
     static void setEntityAndValidator() {
-        entity = new Currency();
-        entity.setTicker(KNOWN_TICKER);
-        entity.setName("BitCoin");
-        entity.setNumberOfCoins(new BigInteger("16770000"));
-        entity.setMarketCap(new BigInteger("189580000000"));
+        entity = new Currency.CurrencyBuilder("BitCoin", new BigInteger("16770000"), new BigInteger("189580000000"))
+            .setTicker(knownTicker)
+            .build();
 
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
@@ -32,7 +30,7 @@ class CurrencyDtoTest {
     @BeforeEach
     void setDto() {
         dto = new CurrencyDto();
-        dto.setTicker(KNOWN_TICKER);
+        dto.setTicker(knownTicker);
         dto.setName("BitCoin");
         dto.setNumberOfCoins("16770000");
         dto.setMarketCap("189580000000");

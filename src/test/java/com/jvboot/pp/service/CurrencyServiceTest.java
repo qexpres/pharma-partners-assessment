@@ -22,8 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class CurrencyServiceTest {
-    static final String NEW_TICKER = "ABC";
-    static final String KNOWN_TICKER = "BTC";
+    static final String ticker = "ABC";
+    static final String name = "AlphaBetaCoin";
+    static final String numberOfCoins = "987654321";
+    static final String marketCap = "123456789";
+
+    static final String knownTicker = "BTC";
 
     Currency newCurrency;
 
@@ -32,11 +36,9 @@ class CurrencyServiceTest {
 
     @BeforeEach
     void setCurrency() {
-        newCurrency = new Currency();
-        newCurrency.setTicker(NEW_TICKER);
-        newCurrency.setName("AlphaBetaCoin");
-        newCurrency.setMarketCap(new BigInteger("123456789"));
-        newCurrency.setNumberOfCoins(new BigInteger("987654321"));
+        newCurrency = new Currency.CurrencyBuilder(name, new BigInteger(numberOfCoins), new BigInteger(marketCap))
+            .setTicker(ticker)
+            .build();
     }
 
     @Test
@@ -52,38 +54,38 @@ class CurrencyServiceTest {
     @Test
     @DirtiesContext
     void createWithKnownTickerShouldThrowConflict() {
-        newCurrency.setTicker(KNOWN_TICKER);
+        newCurrency.setTicker(knownTicker);
 
         ConflictException ex = assertThrows(ConflictException.class, () -> service.create(newCurrency));
-        assertThat(ex.getMessage()).isEqualTo("currency already exists for ticker " + KNOWN_TICKER);
+        assertThat(ex.getMessage()).isEqualTo("currency already exists for ticker " + knownTicker);
     }
 
     @Test
     @DirtiesContext
     void deleteCurrencyWithKnownTickerShouldDeleteCurrency() {
-        service.deleteByTicker(KNOWN_TICKER);
-        NotFoundException ex = assertThrows(NotFoundException.class, () -> service.deleteByTicker(KNOWN_TICKER));
-        assertThat(ex.getMessage()).isEqualTo("could not find currency with ticker " + KNOWN_TICKER);
+        service.deleteByTicker(knownTicker);
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> service.deleteByTicker(knownTicker));
+        assertThat(ex.getMessage()).isEqualTo("could not find currency with ticker " + knownTicker);
     }
 
     @Test
     void deleteCurrencyWithUnknownTickerShouldThrowNotFound() {
-        NotFoundException ex = assertThrows(NotFoundException.class, () -> service.deleteByTicker(NEW_TICKER));
-        assertThat(ex.getMessage()).isEqualTo("could not find currency with ticker " + NEW_TICKER);
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> service.deleteByTicker(ticker));
+        assertThat(ex.getMessage()).isEqualTo("could not find currency with ticker " + ticker);
     }
 
     @Test
     void getCurrencyWithKnownTickerShouldReturnCurrency() {
-        Currency currency = service.getByTicker(KNOWN_TICKER);
+        Currency currency = service.getByTicker(knownTicker);
         assertThat(currency)
             .isNotNull()
-            .matches(c -> KNOWN_TICKER.matches(c.getTicker()));
+            .matches(c -> knownTicker.matches(c.getTicker()));
     }
 
     @Test
     void getCurrencyWithUnknownTickerShouldThrowNotFound() {
-        NotFoundException ex = assertThrows(NotFoundException.class, () -> service.getByTicker(NEW_TICKER));
-        assertThat(ex.getMessage()).isEqualTo("could not find currency with ticker " + NEW_TICKER);
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> service.getByTicker(ticker));
+        assertThat(ex.getMessage()).isEqualTo("could not find currency with ticker " + ticker);
     }
 
     @Test
@@ -106,14 +108,14 @@ class CurrencyServiceTest {
     @Test
     @DirtiesContext
     void updateByTickerShouldUpdate() {
-        Currency originalCurrency = service.getByTicker(KNOWN_TICKER);
+        Currency originalCurrency = service.getByTicker(knownTicker);
 
         Currency currency = shallowClone(originalCurrency);
         currency.setName(currency.getName() + " v2");
         currency.setNumberOfCoins(currency.getNumberOfCoins().add(BigInteger.ONE));
         currency.setMarketCap(currency.getMarketCap().subtract(BigInteger.TEN));
 
-        Currency updatedCurrency = service.updateByTicker(KNOWN_TICKER, currency);
+        Currency updatedCurrency = service.updateByTicker(knownTicker, currency);
 
         assertThat(updatedCurrency)
             .isEqualTo(originalCurrency)
@@ -131,22 +133,19 @@ class CurrencyServiceTest {
 
     @Test
     void updateByTickerShouldNotUpdateTicker() {
-        Currency currency = service.getByTicker(KNOWN_TICKER);
-        currency.setTicker(NEW_TICKER);
+        Currency currency = service.getByTicker(knownTicker);
+        currency.setTicker(ticker);
 
-        Currency updatedCurrency = service.updateByTicker(KNOWN_TICKER, currency);
+        Currency updatedCurrency = service.updateByTicker(knownTicker, currency);
 
         assertThat(updatedCurrency.getTicker())
             .isNotEqualTo(currency.getTicker())
-            .isEqualTo(KNOWN_TICKER);
+            .isEqualTo(knownTicker);
     }
 
     private Currency shallowClone(Currency currency) {
-        Currency cloned = new Currency();
-        cloned.setTicker(currency.getTicker());
-        cloned.setName(currency.getName());
-        cloned.setMarketCap(currency.getMarketCap());
-        cloned.setNumberOfCoins(currency.getNumberOfCoins());
-        return cloned;
+        return new Currency.CurrencyBuilder(currency.getName(), currency.getNumberOfCoins(), currency.getMarketCap())
+            .setTicker(currency.getTicker())
+            .build();
     }
 }
